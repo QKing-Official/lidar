@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://cmn7jpfs4ngfo"]
+
+[ext_resource type="PackedScene" uid="uid://d2jsfipoi0cgs" path="res://Rooms/TestRoom.tscn" id="1_folwd"]
+[ext_resource type="Script" uid="uid://dixie1cuymknh" path="res://World/world.gd" id="1_o14yy"]
+[ext_resource type="PackedScene" uid="uid://cv3yap8wchyuv" path="res://Player/player.tscn" id="2_il6x7"]
+[ext_resource type="PackedScene" uid="uid://dlpkg3ohgprua" path="res://LiDAR/LidarCloud.tscn" id="3_o14yy"]
+[ext_resource type="PackedScene" uid="uid://di6voio48ubh3" path="res://safety/color_limiter.tscn" id="4_04mge"]
+
+[sub_resource type="Environment" id="Environment_g4v7s"]
+background_mode = 1
+ambient_light_source = 1
+reflected_light_source = 1
+
+[node name="World" type="Node3D" unique_id=598990389]
+script = ExtResource("1_o14yy")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=314477522]
+environment = SubResource("Environment_g4v7s")
+
+[node name="TestRoom" parent="." unique_id=1885918719 instance=ExtResource("1_folwd")]
+
+[node name="Player" parent="." unique_id=718840427 instance=ExtResource("2_il6x7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4733756, 2.2271376, 0.14338493)
+
+[node name="LidarCloud" parent="." unique_id=896798073 instance=ExtResource("3_o14yy")]
+
+[node name="ColorLimiter" parent="." unique_id=466432185 instance=ExtResource("4_04mge")]

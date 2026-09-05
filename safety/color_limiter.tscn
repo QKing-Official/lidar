@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://di6voio48ubh3"]
+
+[ext_resource type="Shader" uid="uid://fyq3bbvlvdeo" path="res://safety/color_limiter.gdshader" id="1_cceb0"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fw7gl"]
+shader = ExtResource("1_cceb0")
+
+[node name="ColorLimiter" type="CanvasLayer" unique_id=466432185]
+layer = 128
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1157306756]
+material = SubResource("ShaderMaterial_fw7gl")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

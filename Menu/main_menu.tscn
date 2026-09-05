@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://cesf107eqa84h"]
+
+[ext_resource type="Script" uid="uid://cqa37ncedwfj5" path="res://Menu/main_menu.gd" id="1_ci1se"]
+[ext_resource type="PackedScene" uid="uid://di6voio48ubh3" path="res://safety/color_limiter.tscn" id="2_dtkyu"]
+
+[node name="MainMenu" type="Control" unique_id=286253140]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ci1se")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=396321106]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect" unique_id=516731355]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TITLE" type="Label" parent="ColorRect/VBoxContainer" unique_id=1616260855]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+text = "L I D A R"
+horizontal_alignment = 1
+
+[node name="StartBtn" type="Button" parent="ColorRect/VBoxContainer" unique_id=1712913273]
+unique_name_in_owner = true
+layout_mode = 2
+text = "START SCAN"
+
+[node name="QuitBtn" type="Button" parent="ColorRect/VBoxContainer" unique_id=1722800825]
+unique_name_in_owner = true
+layout_mode = 2
+text = "QUIT"
+
+[node name="ColorLimiter" parent="." unique_id=466432185 instance=ExtResource("2_dtkyu")]
