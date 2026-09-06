@@ -26,6 +26,7 @@ var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 @onready var scanner_ray: RayCast3D = $Head/Camera3D/ScannerRay
 
 func _ready():
+	add_to_group("player")
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	_build_crosshair()
 
@@ -159,3 +160,6 @@ func _fire_circular_scan():
 				scan_hit.emit(hit_pt, is_danger)
 
 	scanner_ray.target_position = Vector3(0, 0, -SCAN_RANGE)
+
+func die():
+	get_tree().reload_current_scene()

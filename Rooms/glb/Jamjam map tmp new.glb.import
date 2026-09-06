@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://dfkwdym5nokd1"
-path="res://.godot/imported/Jamjam Entity.glb-756775c61ef053806c258fc99a0d05db.scn"
+uid="uid://83wy6flerivc"
+path="res://.godot/imported/Jamjam map tmp new.glb-64945cbf554ced8095451509d9326508.scn"
 
 [deps]
 
-source_file="res://Rooms/Jamjam Entity.glb"
-dest_files=["res://.godot/imported/Jamjam Entity.glb-756775c61ef053806c258fc99a0d05db.scn"]
+source_file="res://Rooms/glb/Jamjam map tmp new.glb"
+dest_files=["res://.godot/imported/Jamjam map tmp new.glb-64945cbf554ced8095451509d9326508.scn"]
 
 [params]
 
