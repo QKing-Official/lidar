@@ -87,11 +87,17 @@ func _unhandled_input(event):
 	if event.is_action_pressed("ui_cancel"):
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
+var auto_scan: bool = true
+
 func _physics_process(delta):
 	if not is_on_floor():
 		velocity.y -= gravity * delta
+		if auto_scan:
+			_fire_spherical_scan(100)
 	else:
 		velocity.y = 0.0
+		if auto_scan:
+			auto_scan = false
 
 	if Input.is_key_pressed(KEY_JUMP) and is_on_floor():
 		velocity.y = JUMP_VELOCITY
@@ -153,6 +159,32 @@ func _fire_circular_scan():
 				target = target.get_parent()
 
 			# Route cleanly: enemy handles its own dots; world handles everything else
+			if enemy:
+				enemy.add_enemy_dot(hit_pt)
+			else:
+				var is_danger = collider.is_in_group("danger") if collider else false
+				scan_hit.emit(hit_pt, is_danger)
+
+	scanner_ray.target_position = Vector3(0, 0, -SCAN_RANGE)
+
+func _fire_spherical_scan(rays: int):
+	for i in range(rays):
+		var dir = Vector3(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0), randf_range(-1.0, 1.0)).normalized()
+		scanner_ray.target_position = dir * SCAN_RANGE
+		scanner_ray.force_raycast_update()
+
+		if scanner_ray.is_colliding():
+			var hit_pt = scanner_ray.get_collision_point()
+			var collider = scanner_ray.get_collider()
+
+			var enemy = null
+			var target = collider
+			while target != null:
+				if target.has_method("add_enemy_dot"):
+					enemy = target
+					break
+				target = target.get_parent()
+
 			if enemy:
 				enemy.add_enemy_dot(hit_pt)
 			else:

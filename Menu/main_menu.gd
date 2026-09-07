@@ -1,13 +1,36 @@
 extends Control
 
+var click_player: AudioStreamPlayer
+var static_player: AudioStreamPlayer
+
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	
+	click_player = AudioStreamPlayer.new()
+	click_player.stream = preload("res://Assets/Audio/click.wav")
+	add_child(click_player)
+	
+	static_player = AudioStreamPlayer.new()
+	static_player.stream = preload("res://Assets/Audio/static.wav")
+	static_player.volume_db = -10.0
+	add_child(static_player)
+	static_player.play()
 	
 	_style_button(%StartBtn)
 	_style_button(%QuitBtn)
 	
 	%StartBtn.pressed.connect(_on_start)
 	%QuitBtn.pressed.connect(_on_quit)
+	
+	%StartBtn.mouse_entered.connect(_on_hover)
+	%QuitBtn.mouse_entered.connect(_on_hover)
+	
+	var scanner = $SubViewportContainer/SubViewport/MenuWorld/MenuScanner
+	var lidar = $SubViewportContainer/SubViewport/MenuWorld/LidarCloud
+	scanner.scan_hit.connect(lidar.spawn_dot)
+
+func _on_hover():
+	click_player.play()
 
 func _style_button(btn: Button):
 	# 1. Normal State: Black fill, 2px Red border, Red text

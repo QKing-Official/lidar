@@ -2,8 +2,15 @@
 
 [ext_resource type="Script" uid="uid://cqa37ncedwfj5" path="res://Menu/main_menu.gd" id="1_ci1se"]
 [ext_resource type="PackedScene" uid="uid://di6voio48ubh3" path="res://safety/color_limiter.tscn" id="2_dtkyu"]
+[ext_resource type="PackedScene" uid="uid://dlpkg3ohgprua" path="res://LiDAR/LidarCloud.tscn" id="3_lidar"]
+[ext_resource type="Script" uid="uid://menu_scanner" path="res://Menu/menu_scanner.gd" id="4_scan"]
 
-[node name="MainMenu" type="Control" unique_id=286253140]
+[sub_resource type="Environment" id="Environment_menu"]
+background_mode = 1
+ambient_light_source = 1
+reflected_light_source = 1
+
+[node name="MainMenu" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -12,16 +19,52 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ci1se")
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=396321106]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 1)
+stretch = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect" unique_id=516731355]
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(1152, 648)
+render_target_update_mode = 4
+
+[node name="MenuWorld" type="Node3D" parent="SubViewportContainer/SubViewport"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/SubViewport/MenuWorld"]
+environment = SubResource("Environment_menu")
+
+[node name="LidarCloud" parent="SubViewportContainer/SubViewport/MenuWorld" instance=ExtResource("3_lidar")]
+
+[node name="MenuScanner" type="Node3D" parent="SubViewportContainer/SubViewport/MenuWorld"]
+script = ExtResource("4_scan")
+
+[node name="ScannerRay" type="RayCast3D" parent="SubViewportContainer/SubViewport/MenuWorld/MenuScanner"]
+target_position = Vector3(0, 0, -40)
+
+[node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport/MenuWorld/MenuScanner"]
+
+[node name="RoomGeo" type="CSGCombiner3D" parent="SubViewportContainer/SubViewport/MenuWorld"]
+use_collision = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="SubViewportContainer/SubViewport/MenuWorld/RoomGeo"]
+flip_faces = true
+size = Vector3(20, 10, 20)
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="SubViewportContainer/SubViewport/MenuWorld/RoomGeo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, -5, -4)
+radius = 2.0
+height = 10.0
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="SubViewportContainer/SubViewport/MenuWorld/RoomGeo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, -5, -6)
+radius = 3.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -35,20 +78,22 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TITLE" type="Label" parent="ColorRect/VBoxContainer" unique_id=1616260855]
+[node name="TITLE" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 96
 text = "L I D A R"
 horizontal_alignment = 1
 
-[node name="StartBtn" type="Button" parent="ColorRect/VBoxContainer" unique_id=1712913273]
+[node name="StartBtn" type="Button" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "START SCAN"
 
-[node name="QuitBtn" type="Button" parent="ColorRect/VBoxContainer" unique_id=1722800825]
+[node name="QuitBtn" type="Button" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "QUIT"
 
-[node name="ColorLimiter" parent="." unique_id=466432185 instance=ExtResource("2_dtkyu")]
+[node name="ColorLimiter" parent="." instance=ExtResource("2_dtkyu")]
