@@ -10,6 +10,9 @@ signal scan_hit(pos: Vector3, is_danger: bool)
 
 func _ready():
 	scanner_ray.target_position = Vector3(0, 0, -SCAN_RANGE)
+	scanner_ray.collision_mask = 3
+	scanner_ray.collide_with_areas = true
+	scanner_ray.collide_with_bodies = true
 
 func _physics_process(delta):
 	# Slowly rotate the scanner so it sweeps the room
@@ -35,4 +38,18 @@ func _fire_circular_scan():
 
 		if scanner_ray.is_colliding():
 			var hit_pt = scanner_ray.get_collision_point()
-			scan_hit.emit(hit_pt, false)
+			var collider = scanner_ray.get_collider()
+
+			var enemy = null
+			var target = collider
+			while target != null:
+				if target.has_method("add_enemy_dot"):
+					enemy = target
+					break
+				target = target.get_parent()
+
+			if enemy:
+				enemy.add_enemy_dot(hit_pt)
+			else:
+				var is_danger = collider.is_in_group("danger") if collider else false
+				scan_hit.emit(hit_pt, is_danger)

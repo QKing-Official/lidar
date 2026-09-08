@@ -194,4 +194,7 @@ func _fire_spherical_scan(rays: int):
 	scanner_ray.target_position = Vector3(0, 0, -SCAN_RANGE)
 
 func die():
-	get_tree().reload_current_scene()
+	if has_node("/root/SaveManager"):
+		SaveManager.reload_current_save()
+	else:
+		get_tree().reload_current_scene()

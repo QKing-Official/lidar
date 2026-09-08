@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://chukmlfi0fyg4"]
+
+[ext_resource type="Script" uid="uid://c65i7ogvu8jkb" path="res://World/Room1.gd" id="1_world"]
+[ext_resource type="PackedScene" uid="uid://cv3yap8wchyuv" path="res://Player/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" uid="uid://dlpkg3ohgprua" path="res://LiDAR/LidarCloud.tscn" id="3_lidar"]
+[ext_resource type="PackedScene" uid="uid://crjrcubn4hqx7" path="res://Entities/testenemy.tscn" id="4_enemy"]
+[ext_resource type="PackedScene" uid="uid://c6avln546hg4u" path="res://Rooms/glb/FinaleVer2.glb" id="5_map"]
+[ext_resource type="Script" uid="uid://bwhxtu5g2nibh" path="res://World/world_generator.gd" id="6_gen"]
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_map"]
+vertices = PackedVector3Array(-90.946754, 16.268745, -5.4004545, -90.946754, 16.268745, -6.6504545, -91.696754, 16.518745, -6.6504545, -90.446754, 16.268745, 3.8495455, -90.446754, 16.268745, -5.4004545, -91.696754, 16.268745, 3.8495455, -88.446754, 2.2687454, -5.6504545, -87.446754, 2.5187454, -5.6504545, -87.446754, 2.5187454, -5.9004545, -88.446754, 2.2687454, -5.9004545, -88.446754, 2.2687454, 1.8495455, -88.446754, 2.2687454, 3.0995455, -86.946754, 2.2687454, 3.0995455, -86.946754, 2.2687454, 1.8495455, -89.196754, 2.2687454, -4.9004545, -89.446754, 2.2687454, -6.6504545, -88.446754, 2.2687454, -6.6504545, -86.946754, 2.2687454, -3.1504545, -86.446754, 2.2687454, -3.4004545, -87.196754, 2.2687454, -4.6504545, -87.946754, 2.2687454, -3.6504545, -86.196754, 2.2687454, 1.5995455, -86.196754, 2.2687454, -1.6504545, -89.446754, 2.2687454, -1.6504545, -89.446754, 2.2687454, 1.5995455, -86.946754, 2.2687454, -1.9004545, -88.446754, 2.2687454, -1.9004545, -89.446754, 2.2687454, -3.4004545, -89.196754, 2.2687454, -3.9004545, -85.196754, 2.2687454, 6.5995455, -85.446754, 2.2687454, 2.8495455, -85.696754, 2.2687454, 3.3495455, -88.446754, 2.2687454, -3.1504545, -89.446754, 2.2687454, 3.3495455, -89.446754, 2.2687454, 6.5995455, -87.446754, 2.5187454, -6.6504545, -85.446754, 2.2687454, -3.1504545, 9.303246, 2.2687454, -4.6504545, 9.303246, 2.2687454, -6.6504545, -85.446754, 2.2687454, -1.9004545, -85.446754, 2.2687454, 1.8495455, 9.303246, 2.2687454, 6.5995455, 9.303246, 2.2687454, 4.5995455, 11.303246, 2.2687454, -4.4004545, 11.303246, 2.2687454, 4.3495455, 10.303246, 62.268745, -6.6504545, 10.303246, 62.268745, -5.4004545, 19.553246, 62.268745, -5.4004545, 19.553246, 62.268745, -6.6504545, 8.303246, 62.268745, -4.6504545, 8.303246, 62.268745, 4.5995455, 9.553246, 62.268745, 4.5995455, 9.553246, 62.268745, -4.6504545, 20.303246, 62.268745, -4.6504545, 20.303246, 62.268745, 4.5995455, 21.553246, 62.268745, 4.5995455, 21.553246, 62.268745, -4.6504545, 19.303246, 2.2687454, 4.3495455, 19.303246, 2.2687454, -4.4004545, -88.696754, 5.2687454, -1.9004545, -85.696754, 5.2687454, -1.6504545, -85.696754, 5.2687454, -3.1504545, -88.696754, 5.2687454, -3.1504545, -87.946754, 7.2687454, -0.9004545, -88.446754, 7.2687454, -0.40045452, -88.196754, 7.2687454, 0.8495455, -86.696754, 7.2687454, 0.8495455, -86.696754, 7.2687454, -0.9004545, -85.696754, 5.2687454, 3.0995455, -85.696754, 5.2687454, 1.5995455, -88.696754, 5.2687454, 1.8495455, -88.946754, 5.2687454, 2.8495455, -91.696754, 16.268745, 5.5995455, -91.696754, 16.268745, 6.5995455, -90.446754, 16.268745, 6.5995455, -90.446754, 16.268745, 5.3495455, 10.303246, 62.268745, 5.3495455, 10.303246, 62.268745, 6.5995455, 19.553246, 62.268745, 6.5995455, 19.553246, 62.268745, 5.3495455)
+polygons = [PackedInt32Array(2, 1, 0), PackedInt32Array(0, 4, 3), PackedInt32Array(3, 5, 0), PackedInt32Array(0, 5, 2), PackedInt32Array(9, 8, 6), PackedInt32Array(6, 8, 7), PackedInt32Array(13, 12, 10), PackedInt32Array(10, 12, 11), PackedInt32Array(6, 14, 9), PackedInt32Array(9, 14, 15), PackedInt32Array(15, 16, 9), PackedInt32Array(17, 20, 18), PackedInt32Array(18, 20, 19), PackedInt32Array(13, 10, 21), PackedInt32Array(21, 10, 24), PackedInt32Array(21, 24, 23), PackedInt32Array(21, 23, 22), PackedInt32Array(25, 22, 26), PackedInt32Array(26, 22, 23), PackedInt32Array(28, 27, 14), PackedInt32Array(14, 27, 15), PackedInt32Array(31, 30, 29), PackedInt32Array(27, 28, 32), PackedInt32Array(32, 28, 20), PackedInt32Array(11, 12, 33), PackedInt32Array(33, 12, 31), PackedInt32Array(33, 31, 34), PackedInt32Array(34, 31, 29), PackedInt32Array(20, 17, 32), PackedInt32Array(32, 17, 25), PackedInt32Array(32, 25, 26), PackedInt32Array(19, 7, 8), PackedInt32Array(19, 8, 35), PackedInt32Array(18, 19, 36), PackedInt32Array(36, 19, 35), PackedInt32Array(36, 35, 37), PackedInt32Array(37, 35, 38), PackedInt32Array(22, 39, 21), PackedInt32Array(21, 39, 40), PackedInt32Array(42, 41, 29), PackedInt32Array(39, 36, 29), PackedInt32Array(29, 36, 42), PackedInt32Array(42, 36, 37), PackedInt32Array(42, 37, 43), PackedInt32Array(29, 30, 40), PackedInt32Array(29, 40, 39), PackedInt32Array(43, 44, 42), PackedInt32Array(48, 47, 45), PackedInt32Array(45, 47, 46), PackedInt32Array(52, 51, 49), PackedInt32Array(49, 51, 50), PackedInt32Array(56, 55, 53), PackedInt32Array(53, 55, 54), PackedInt32Array(43, 58, 44), PackedInt32Array(44, 58, 57), PackedInt32Array(62, 61, 59), PackedInt32Array(59, 61, 60), PackedInt32Array(64, 63, 65), PackedInt32Array(65, 63, 67), PackedInt32Array(65, 67, 66), PackedInt32Array(70, 69, 71), PackedInt32Array(71, 69, 68), PackedInt32Array(73, 72, 74), PackedInt32Array(74, 72, 75), PackedInt32Array(79, 78, 76), PackedInt32Array(76, 78, 77)]
+
+[node name="World" type="Node3D" unique_id=1447399082]
+script = ExtResource("1_world")
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=1877845071]
+navigation_mesh = SubResource("NavigationMesh_map")
+
+[node name="FinaleVer2" parent="NavigationRegion3D" unique_id=823760968 instance=ExtResource("5_map")]
+script = ExtResource("6_gen")
+
+[node name="Player" parent="." unique_id=1703602818 instance=ExtResource("2_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 0)
+
+[node name="Enemy1" parent="." unique_id=1420904054 instance=ExtResource("4_enemy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 2, 10)
+
+[node name="Enemy2" parent="." unique_id=581728771 instance=ExtResource("4_enemy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 2, -10)
+
+[node name="Enemy3" parent="." unique_id=161575567 instance=ExtResource("4_enemy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 2, -5)
+
+[node name="LidarCloud" parent="." unique_id=1309204412 instance=ExtResource("3_lidar")]

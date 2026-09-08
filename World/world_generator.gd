@@ -18,6 +18,8 @@ func _process_node(node: Node, mat: Material):
 			if child is StaticBody3D:
 				child.collision_layer = 1
 				child.collision_mask = 1
+				for g in node.get_groups():
+					child.add_to_group(g)
 	
 	for child in node.get_children():
 		_process_node(child, mat)

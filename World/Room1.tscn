@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c6a8b7q6d2n5"]
 
-[ext_resource type="Script" uid="uid://dixie1cuymknh" path="res://World/world.gd" id="1_world"]
+[ext_resource type="Script" uid="uid://dixie1cuymknh" path="res://World/Room1.gd" id="1_world"]
 [ext_resource type="PackedScene" uid="uid://cv3yap8wchyuv" path="res://Player/player.tscn" id="2_player"]
 [ext_resource type="PackedScene" uid="uid://dlpkg3ohgprua" path="res://LiDAR/LidarCloud.tscn" id="3_lidar"]
 [ext_resource type="PackedScene" uid="uid://crjrcubn4hqx7" path="res://Entities/testenemy.tscn" id="4_enemy"]
@@ -24,7 +24,7 @@ script = ExtResource("6_gen")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 107.72497, 191.97595, 0)
 
 [node name="Enemy1" parent="." unique_id=1153760308 instance=ExtResource("4_enemy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 2, 10)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 93.565475, 5.057798, -35.590942)
 
 [node name="Enemy2" parent="." unique_id=1644926454 instance=ExtResource("4_enemy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 2, -10)

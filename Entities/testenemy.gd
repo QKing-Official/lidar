@@ -182,7 +182,10 @@ func _process_creep_movement(delta: float) -> bool:
 		if player.has_method("die"):
 			player.die()
 		else:
-			get_tree().reload_current_scene()
+			if has_node("/root/SaveManager"):
+				SaveManager.reload_current_save()
+			else:
+				get_tree().reload_current_scene()
 		return true
 
 	# Always update the nav target to the player's position so it always paths to them.
@@ -253,7 +256,10 @@ func _check_player_contact():
 			if collider.has_method("die"):
 				collider.die()
 			else:
-				get_tree().reload_current_scene()
+				if has_node("/root/SaveManager"):
+					SaveManager.reload_current_save()
+				else:
+					get_tree().reload_current_scene()
 			return
 
 func _check_line_of_sight() -> bool:
