@@ -12,12 +12,15 @@ func _ready():
 	static_player.play()
 	
 	_style_button(%StartBtn)
+	_style_button(%SettingsBtn)
 	_style_button(%QuitBtn)
 	
 	%StartBtn.pressed.connect(_on_start)
+	%SettingsBtn.pressed.connect(_on_settings)
 	%QuitBtn.pressed.connect(_on_quit)
 	
 	%StartBtn.mouse_entered.connect(_on_hover)
+	%SettingsBtn.mouse_entered.connect(_on_hover)
 	%QuitBtn.mouse_entered.connect(_on_hover)
 	
 	var scanner = $SubViewportContainer/SubViewport/MenuWorld/MenuScanner
@@ -31,6 +34,16 @@ func _on_start():
 	AudioManager.play_sfx("res://Assets/Audio/click.wav")
 	%VBoxContainer.hide()
 	_show_save_slots()
+
+func _on_settings():
+	AudioManager.play_sfx("res://Assets/Audio/click.wav")
+	%VBoxContainer.hide()
+	var settings = preload("res://UI/SettingsMenu.tscn").instantiate()
+	add_child(settings)
+	settings.back_pressed.connect(func():
+		settings.queue_free()
+		%VBoxContainer.show()
+	)
 
 func _on_quit():
 	AudioManager.play_sfx("res://Assets/Audio/click.wav")

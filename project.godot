@@ -24,6 +24,8 @@ buses/default_bus_layout="uid://dtwrwnrbdafd"
 [autoload]
 
 SaveManager="*res://Scripts/SaveManager.gd"
+SettingsManager="*res://Scripts/SettingsManager.gd"
+PauseMenu="*res://UI/PauseMenu.tscn"
 AudioManager="*uid://dl46ebaxp04my"
 
 [display]

@@ -1,15 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://lvltrans"]
+[gd_scene format=3 uid="uid://lvltrans"]
 
-[ext_resource type="Script" path="res://World/level_transition.gd" id="1_scr"]
+[ext_resource type="Script" uid="uid://cqgx5w8uc8ar4" path="res://World/level_transition.gd" id="1_scr"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_trans"]
-size = Vector3(4, 4, 4)
+size = Vector3(51.876038, 4, 57.113525)
 
-[node name="LevelTransition" type="Area3D"]
+[node name="LevelTransition" type="Area3D" unique_id=1241664614]
 collision_layer = 0
-collision_mask = 2
+collision_mask = 3
 script = ExtResource("1_scr")
 next_level_path = "res://World/Room1.tscn"
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=30768825]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.2982483, 0, -12.593384)
 shape = SubResource("BoxShape3D_trans")

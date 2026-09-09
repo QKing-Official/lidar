@@ -3,15 +3,8 @@ extends CharacterBody3D
 signal scan_hit(pos: Vector3, is_danger: bool)
 
 # ==================== CONTROLS & SETTINGS ====================
-@export var KEY_FORWARD: Key = KEY_W
-@export var KEY_BACKWARD: Key = KEY_S
-@export var KEY_LEFT: Key = KEY_A
-@export var KEY_RIGHT: Key = KEY_D
-@export var KEY_JUMP: Key = KEY_SPACE
-
 @export var SPEED: float = 5.0
 @export var JUMP_VELOCITY: float = 4.5
-@export var MOUSE_SENS: float = 0.0025
 @export var SCAN_RANGE: float = 60.0
 
 # Wide Circular LiDAR Settings
@@ -28,6 +21,8 @@ var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 func _ready():
 	add_to_group("player")
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	if has_node("/root/SettingsManager"):
+		camera.fov = SettingsManager.fov
 	_build_crosshair()
 
 	scanner_ray.position = Vector3.ZERO
@@ -68,8 +63,9 @@ func _build_crosshair():
 
 func _unhandled_input(event):
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-		rotate_y(-event.relative.x * MOUSE_SENS)
-		head.rotate_x(-event.relative.y * MOUSE_SENS)
+		var sens = SettingsManager.mouse_sensitivity if has_node("/root/SettingsManager") else 0.0025
+		rotate_y(-event.relative.x * sens)
+		head.rotate_x(-event.relative.y * sens)
 		head.rotation.x = clamp(head.rotation.x, deg_to_rad(-80), deg_to_rad(80))
 
 	var clicked = false
@@ -84,9 +80,6 @@ func _unhandled_input(event):
 		else:
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
-	if event.is_action_pressed("ui_cancel"):
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-
 var auto_scan: bool = true
 
 func _physics_process(delta):
@@ -99,19 +92,10 @@ func _physics_process(delta):
 		if auto_scan:
 			auto_scan = false
 
-	if Input.is_key_pressed(KEY_JUMP) and is_on_floor():
+	if Input.is_action_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 
-	var move_vec = Vector2.ZERO
-	if Input.is_key_pressed(KEY_FORWARD):
-		move_vec.y -= 1.0
-	if Input.is_key_pressed(KEY_BACKWARD):
-		move_vec.y += 1.0
-	if Input.is_key_pressed(KEY_LEFT):
-		move_vec.x -= 1.0
-	if Input.is_key_pressed(KEY_RIGHT):
-		move_vec.x += 1.0
-	move_vec = move_vec.normalized()
+	var move_vec = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 
 	var direction = (transform.basis * Vector3(move_vec.x, 0, move_vec.y)).normalized()
 	if direction:

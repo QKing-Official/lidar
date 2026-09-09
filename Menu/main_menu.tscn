@@ -88,6 +88,11 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "PLAY"
 
+[node name="SettingsBtn" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "SETTINGS"
+
 [node name="QuitBtn" type="Button" parent="VBoxContainer" unique_id=1238950934]
 unique_name_in_owner = true
 layout_mode = 2
