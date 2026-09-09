@@ -102,3 +102,25 @@ func remap_action(action: String, event: InputEvent):
 		InputMap.action_erase_events(action)
 		InputMap.action_add_event(action, event)
 		save_settings()
+
+func reset_to_defaults():
+	mouse_sensitivity = 0.0025
+	fov = 75.0
+	fullscreen = false
+	vsync = true
+	
+	for action in default_keybinds.keys():
+		if InputMap.has_action(action):
+			InputMap.action_erase_events(action)
+			var val = default_keybinds[action]
+			var event
+			if val == MOUSE_BUTTON_LEFT or val == MOUSE_BUTTON_RIGHT:
+				event = InputEventMouseButton.new()
+				event.button_index = val
+			else:
+				event = InputEventKey.new()
+				event.physical_keycode = val
+			InputMap.action_add_event(action, event)
+			
+	apply_graphics_settings()
+	save_settings()

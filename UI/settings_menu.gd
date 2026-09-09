@@ -15,6 +15,12 @@ func _ready():
 		back_pressed.emit()
 	)
 	
+	%ResetBtn.pressed.connect(func():
+		click_player.play()
+		SettingsManager.reset_to_defaults()
+		_refresh_ui_from_settings()
+	)
+	
 	# Setup Graphics
 	%FovSlider.value = SettingsManager.fov
 	%FovSlider.value_changed.connect(func(val):
@@ -32,20 +38,22 @@ func _ready():
 	)
 	%SensLabel.text = str(snapped(SettingsManager.mouse_sensitivity, 0.0001))
 	
-	%FullscreenCheck.button_pressed = SettingsManager.fullscreen
+	_update_checkbox(%FullscreenCheck, SettingsManager.fullscreen)
 	%FullscreenCheck.toggled.connect(func(pressed):
 		click_player.play()
 		SettingsManager.fullscreen = pressed
 		SettingsManager.apply_graphics_settings()
 		SettingsManager.save_settings()
+		_update_checkbox(%FullscreenCheck, pressed)
 	)
 	
-	%VSyncCheck.button_pressed = SettingsManager.vsync
+	_update_checkbox(%VSyncCheck, SettingsManager.vsync)
 	%VSyncCheck.toggled.connect(func(pressed):
 		click_player.play()
 		SettingsManager.vsync = pressed
 		SettingsManager.apply_graphics_settings()
 		SettingsManager.save_settings()
+		_update_checkbox(%VSyncCheck, pressed)
 	)
 	
 	_setup_keybind_button("move_forward", %BtnForward)
@@ -54,6 +62,23 @@ func _ready():
 	_setup_keybind_button("move_right", %BtnRight)
 	_setup_keybind_button("jump", %BtnJump)
 	_setup_keybind_button("fire_lidar", %BtnFire)
+
+func _refresh_ui_from_settings():
+	%FovSlider.set_value_no_signal(SettingsManager.fov)
+	%FovLabel.text = str(int(SettingsManager.fov))
+	
+	%SensSlider.set_value_no_signal(SettingsManager.mouse_sensitivity)
+	%SensLabel.text = str(snapped(SettingsManager.mouse_sensitivity, 0.0001))
+	
+	_update_checkbox(%FullscreenCheck, SettingsManager.fullscreen)
+	_update_checkbox(%VSyncCheck, SettingsManager.vsync)
+	
+	_update_keybind_label("move_forward", %BtnForward)
+	_update_keybind_label("move_backward", %BtnBackward)
+	_update_keybind_label("move_left", %BtnLeft)
+	_update_keybind_label("move_right", %BtnRight)
+	_update_keybind_label("jump", %BtnJump)
+	_update_keybind_label("fire_lidar", %BtnFire)
 
 func _setup_keybind_button(action: String, btn: Button):
 	# Unhook previous connections to avoid double triggers if this is called repeatedly
@@ -67,6 +92,21 @@ func _on_keybind_pressed(action: String, btn: Button):
 	click_player.play()
 	listening_action = action
 	btn.text = "PRESS ANY KEY..."
+
+func _update_checkbox(btn: Button, pressed: bool):
+	btn.button_pressed = pressed
+	if pressed:
+		btn.text = "V"
+		btn.add_theme_color_override("font_color", Color(1, 1, 1, 1))
+		btn.add_theme_color_override("font_hover_color", Color(1, 1, 1, 1))
+		btn.add_theme_color_override("font_pressed_color", Color(1, 1, 1, 1))
+		btn.add_theme_color_override("font_focus_color", Color(1, 1, 1, 1))
+	else:
+		btn.text = "X"
+		btn.add_theme_color_override("font_color", Color(1, 0, 0, 1))
+		btn.add_theme_color_override("font_hover_color", Color(1, 0, 0, 1))
+		btn.add_theme_color_override("font_pressed_color", Color(1, 0, 0, 1))
+		btn.add_theme_color_override("font_focus_color", Color(1, 0, 0, 1))
 
 func _update_keybind_label(action: String, btn: Button):
 	var events = InputMap.action_get_events(action)

@@ -1,21 +1,22 @@
-[gd_scene load_steps=3 format=3 uid="uid://pause_menu"]
+[gd_scene format=3 uid="uid://bj5i8qbd3546y"]
 
-[ext_resource type="Script" path="res://UI/pause_menu.gd" id="1_scr"]
+[ext_resource type="Script" uid="uid://cm07wxwcoamon" path="res://UI/pause_menu.gd" id="1_scr"]
 [ext_resource type="PackedScene" path="res://UI/SettingsMenu.tscn" id="2_settings"]
+[ext_resource type="PackedScene" uid="uid://di6voio48ubh3" path="res://safety/color_limiter.tscn" id="3_73kip"]
 
-[node name="PauseMenu" type="CanvasLayer"]
+[node name="PauseMenu" type="CanvasLayer" unique_id=683341261]
 process_mode = 3
 layer = 100
 visible = false
 script = ExtResource("1_scr")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=597868306]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color(0, 0, 0, 0.8)
 
-[node name="MainPanel" type="VBoxContainer" parent="."]
+[node name="MainPanel" type="VBoxContainer" parent="." unique_id=121908600]
 unique_name_in_owner = true
 anchors_preset = 8
 anchor_left = 0.5
@@ -30,26 +31,28 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 20
 
-[node name="Label" type="Label" parent="MainPanel"]
+[node name="Label" type="Label" parent="MainPanel" unique_id=2056905839]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0, 0, 1)
 theme_override_font_sizes/font_size = 48
 text = "PAUSED"
 horizontal_alignment = 1
 
-[node name="ContinueBtn" type="Button" parent="MainPanel"]
+[node name="ContinueBtn" type="Button" parent="MainPanel" unique_id=1877856065]
 unique_name_in_owner = true
 layout_mode = 2
 text = "CONTINUE"
 
-[node name="SettingsBtn" type="Button" parent="MainPanel"]
+[node name="SettingsBtn" type="Button" parent="MainPanel" unique_id=915303311]
 unique_name_in_owner = true
 layout_mode = 2
 text = "SETTINGS"
 
-[node name="ExitBtn" type="Button" parent="MainPanel"]
+[node name="ExitBtn" type="Button" parent="MainPanel" unique_id=2004150718]
 unique_name_in_owner = true
 layout_mode = 2
 text = "EXIT TO MENU"
 
-[node name="SettingsMenu" parent="." instance=ExtResource("2_settings")]
+[node name="SettingsMenu" parent="." unique_id=1850330615 instance=ExtResource("2_settings")]
+
+[node name="ColorLimiter" parent="." unique_id=466432185 instance=ExtResource("3_73kip")]

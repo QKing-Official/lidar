@@ -1,6 +1,6 @@
 [gd_scene format=4 uid="uid://ccivjcjninhes"]
 
-[ext_resource type="Script" uid="uid://c65i7ogvu8jkb" path="res://World/Room1.gd" id="1_world"]
+[ext_resource type="Script" uid="uid://bo1u861gtunq4" path="res://World/tutorial.gd" id="1_world"]
 [ext_resource type="PackedScene" uid="uid://cv3yap8wchyuv" path="res://Player/player.tscn" id="2_player"]
 [ext_resource type="PackedScene" uid="uid://dlpkg3ohgprua" path="res://LiDAR/LidarCloud.tscn" id="3_lidar"]
 [ext_resource type="Script" uid="uid://bwhxtu5g2nibh" path="res://World/world_generator.gd" id="6_gen"]
@@ -1624,7 +1624,7 @@ transform = Transform3D(0.2785582, -2.0969558, 0, 0.35341948, 1.6527787, 0, 0, 0
 mesh = SubResource("ArrayMesh_5bi1u")
 
 [node name="Player" parent="." unique_id=1076120534 instance=ExtResource("2_player")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.950521, 0)
 
 [node name="LidarCloud" parent="." unique_id=1283660881 instance=ExtResource("3_lidar")]
 
