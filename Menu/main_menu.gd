@@ -1,14 +1,9 @@
 extends Control
 
-var click_player: AudioStreamPlayer
 var static_player: AudioStreamPlayer
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	
-	click_player = AudioStreamPlayer.new()
-	click_player.stream = preload("res://Assets/Audio/click.wav")
-	add_child(click_player)
 	
 	static_player = AudioStreamPlayer.new()
 	static_player.stream = preload("res://Assets/Audio/static.wav")
@@ -30,13 +25,15 @@ func _ready():
 	scanner.scan_hit.connect(lidar.spawn_dot)
 
 func _on_hover():
-	click_player.play()
+	AudioManager.play_sfx("res://Assets/Audio/click.wav")
 
 func _on_start():
+	AudioManager.play_sfx("res://Assets/Audio/click.wav")
 	%VBoxContainer.hide()
 	_show_save_slots()
 
 func _on_quit():
+	AudioManager.play_sfx("res://Assets/Audio/click.wav")
 	get_tree().quit()
 
 func _show_save_slots():
@@ -75,7 +72,7 @@ func _show_save_slots():
 	back_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	_style_button(back_btn)
 	back_btn.pressed.connect(func():
-		click_player.play()
+		AudioManager.play_sfx("res://Assets/Audio/click.wav")
 		save_container.queue_free()
 		%VBoxContainer.show()
 	)
@@ -127,7 +124,7 @@ func _create_slot_ui(slot: int, parent: Control):
 	play_btn.text = "PLAY"
 	_style_button(play_btn)
 	play_btn.pressed.connect(func():
-		click_player.play()
+		AudioManager.play_sfx("res://Assets/Audio/click.wav")
 		SaveManager.load_game(slot)
 	)
 	play_btn.mouse_entered.connect(_on_hover)
@@ -147,7 +144,7 @@ func _create_slot_ui(slot: int, parent: Control):
 		del_btn.add_theme_stylebox_override("normal", del_style_normal)
 		del_btn.add_theme_stylebox_override("hover", del_style_hover)
 		del_btn.pressed.connect(func():
-			click_player.play()
+			AudioManager.play_sfx("res://Assets/Audio/click.wav")
 			SaveManager.delete_save(slot)
 			parent.get_parent().get_parent().queue_free()
 			_show_save_slots()

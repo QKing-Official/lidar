@@ -12,7 +12,7 @@ var thump_player: AudioStreamPlayer
 
 func _ready():
 	thump_player = AudioStreamPlayer.new()
-	thump_player.stream = preload("res://Assets/Audio/thump.wav")
+	AudioManager.play_sfx("res://Assets/Audio/thump.wav")
 	add_child(thump_player)
 	
 	# Ensure the fade rect starts black and visible
