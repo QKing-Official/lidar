@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://endcutscene"]
+[gd_scene format=3 uid="uid://endcutscene"]
 
-[ext_resource type="Script" path="res://Menu/end_cutscene.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://dgxg3tytjy4pm" path="res://Menu/end_cutscene.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://di6voio48ubh3" path="res://safety/color_limiter.tscn" id="2_clm"]
 
-[node name="EndCutscene" type="Control"]
+[node name="EndCutscene" type="Control" unique_id=2031455008]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -12,7 +12,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_script")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=292907168]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -21,7 +21,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1392799708]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -31,7 +31,7 @@ grow_vertical = 2
 theme_override_constants/margin_left = 150
 theme_override_constants/margin_right = 150
 
-[node name="Label" type="Label" parent="MarginContainer"]
+[node name="Label" type="Label" parent="MarginContainer" unique_id=1269640687]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 48
@@ -40,4 +40,4 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="ColorLimiter" parent="." instance=ExtResource("2_clm")]
+[node name="ColorLimiter" parent="." unique_id=147136713 instance=ExtResource("2_clm")]

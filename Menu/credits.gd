@@ -24,6 +24,8 @@ func _ready():
 	if SaveManager.current_slot > 0:
 		SaveManager.delete_save(SaveManager.current_slot)
 	
+	SaveManager.mark_game_completed()
+	
 	var tween = get_tree().create_tween()
 	tween.tween_interval(1.0)
 	tween.tween_callback(self._next_line)

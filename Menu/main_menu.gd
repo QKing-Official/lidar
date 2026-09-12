@@ -24,9 +24,21 @@ func _ready():
 	%SettingsBtn.mouse_entered.connect(_on_hover)
 	%QuitBtn.mouse_entered.connect(_on_hover)
 	
-	var scanner = $SubViewportContainer/SubViewport/MenuWorld/MenuScanner
-	var lidar = $SubViewportContainer/SubViewport/MenuWorld/LidarCloud
-	scanner.scan_hit.connect(lidar.spawn_dot)
+	if SaveManager.game_completed:
+		$SubViewportContainer.hide()
+		
+		var star_bg = ColorRect.new()
+		star_bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+		var mat = ShaderMaterial.new()
+		mat.shader = load("res://Shaders/stars.gdshader")
+		star_bg.material = mat
+		
+		add_child(star_bg)
+		move_child(star_bg, 0)
+	else:
+		var scanner = $SubViewportContainer/SubViewport/MenuWorld/MenuScanner
+		var lidar = $SubViewportContainer/SubViewport/MenuWorld/LidarCloud
+		scanner.scan_hit.connect(lidar.spawn_dot)
 
 func _on_hover():
 	AudioManager.play_sfx("res://Assets/Audio/click.wav")

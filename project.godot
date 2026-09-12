@@ -10,12 +10,12 @@ config_version=5
 
 [application]
 
-config/name="LiDAR"
+config/name="L I D A R"
 run/main_scene="res://Menu/splash_collaboration.tscn"
 config/features=PackedStringArray("4.7", "Forward Plus")
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/show_image=false
-config/icon="res://icon.svg"
+config/icon="res://icon.png"
 
 [audio]
 
@@ -26,7 +26,7 @@ buses/default_bus_layout="uid://dtwrwnrbdafd"
 SaveManager="*res://Scripts/SaveManager.gd"
 SettingsManager="*res://Scripts/SettingsManager.gd"
 PauseMenu="*res://UI/PauseMenu.tscn"
-AudioManager="*uid://dl46ebaxp04my"
+AudioManager="*res://audio/AudioManager.gd"
 
 [display]
 
@@ -58,4 +58,5 @@ fire_lidar={
 [rendering]
 
 rendering_device/driver.windows="d3d12"
+textures/vram_compression/import_etc2_astc=true
 environment/defaults/default_clear_color=Color(0, 0, 0, 1)

@@ -9,9 +9,36 @@ var jumpscare_enemy_scene_file: String = ""
 # Debug variable for fast testing:
 # -1 = Disabled (Default)
 # 0 = Tutorial, 1 = Room1, 2 = Room2, 3 = Finale
-var DEBUG_START_ROOM: int = 2
+var DEBUG_START_ROOM: int = -1
 
 const SAVE_DIR = "user://"
+const GLOBAL_SAVE_PATH = "user://global_save.json"
+
+var game_completed: bool = false
+
+func _ready():
+	_load_global()
+
+func _load_global():
+	if FileAccess.file_exists(GLOBAL_SAVE_PATH):
+		var file = FileAccess.open(GLOBAL_SAVE_PATH, FileAccess.READ)
+		var text = file.get_as_text()
+		file.close()
+		var json = JSON.new()
+		if json.parse(text) == OK:
+			var data = json.get_data()
+			if data is Dictionary and data.has("game_completed"):
+				game_completed = data["game_completed"]
+
+func mark_game_completed():
+	game_completed = true
+	var data = {
+		"game_completed": true
+	}
+	var file = FileAccess.open(GLOBAL_SAVE_PATH, FileAccess.WRITE)
+	if file:
+		file.store_string(JSON.stringify(data))
+		file.close()
 
 func save_game(slot: int):
 	current_slot = slot

@@ -1,9 +1,9 @@
-[gd_scene format=3 uid="uid://title_splash"]
+[gd_scene format=3 uid="uid://cm1tliqlcuyus"]
 
-[ext_resource type="Script" uid="uid://splash_script" path="res://Menu/splash_screen.gd" id="1_spl"]
+[ext_resource type="Script" uid="uid://cqag8lrwmxm7a" path="res://Menu/splash_screen.gd" id="1_spl"]
 [ext_resource type="PackedScene" uid="uid://di6voio48ubh3" path="res://safety/color_limiter.tscn" id="2_clm"]
 
-[node name="SplashTitle" type="Control"]
+[node name="SplashTitle" type="Control" unique_id=1290944834]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -12,9 +12,8 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_spl")
 next_scene_path = "res://Menu/main_menu.tscn"
-display_time = 3.0
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="." unique_id=430174675]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -23,7 +22,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="." unique_id=601836385]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -44,7 +43,7 @@ theme_override_font_sizes/font_size = 96
 text = "L I D A R"
 horizontal_alignment = 1
 
-[node name="FadeRect" type="ColorRect" parent="."]
+[node name="FadeRect" type="ColorRect" parent="." unique_id=1349942669]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -54,4 +53,4 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
-[node name="ColorLimiter" parent="." instance=ExtResource("2_clm")]
+[node name="ColorLimiter" parent="." unique_id=363578009 instance=ExtResource("2_clm")]

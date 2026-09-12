@@ -99,3 +99,14 @@ layout_mode = 2
 text = "QUIT"
 
 [node name="ColorLimiter" parent="." unique_id=1490615426 instance=ExtResource("2_dtkyu")]
+
+[node name="Label" type="Label" parent="." unique_id=709298174]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -22.0
+offset_right = 42.0
+grow_vertical = 0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+text = "1.0"
