@@ -88,7 +88,7 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "PLAY"
 
-[node name="SettingsBtn" type="Button" parent="VBoxContainer"]
+[node name="SettingsBtn" type="Button" parent="VBoxContainer" unique_id=1502262414]
 unique_name_in_owner = true
 layout_mode = 2
 text = "SETTINGS"

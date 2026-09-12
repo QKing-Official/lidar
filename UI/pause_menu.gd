@@ -36,7 +36,7 @@ func _input(event):
 			%MainPanel.show()
 			return
 			
-		if get_tree().current_scene.name == "MainMenu":
+		if not get_tree().current_scene or get_tree().current_scene.name == "MainMenu":
 			return # Don't pause in main menu
 			
 		visible = !visible

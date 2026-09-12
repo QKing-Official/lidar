@@ -5,8 +5,9 @@ var static_player: AudioStreamPlayer
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	
+	AudioManager.play_music("res://Assets/Audio/Music/L_I_D_A_R.ogg")
+	
 	static_player = AudioStreamPlayer.new()
-	static_player.stream = preload("res://Assets/Audio/static.wav")
 	static_player.volume_db = -10.0
 	add_child(static_player)
 	static_player.play()

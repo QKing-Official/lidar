@@ -5,7 +5,9 @@
 [ext_resource type="PackedScene" uid="uid://dlpkg3ohgprua" path="res://LiDAR/LidarCloud.tscn" id="3_lidar"]
 [ext_resource type="PackedScene" uid="uid://crjrcubn4hqx7" path="res://Entities/testenemy.tscn" id="4_enemy"]
 [ext_resource type="PackedScene" uid="uid://dkv34kanymn76" path="res://Rooms/glb/JamjamRoom1FinalFR.glb" id="5_map"]
+[ext_resource type="PackedScene" uid="uid://hangeruid3" path="res://Entities/Hanger.tscn" id="6_8w1nx"]
 [ext_resource type="Script" uid="uid://bwhxtu5g2nibh" path="res://World/world_generator.gd" id="6_gen"]
+[ext_resource type="PackedScene" uid="uid://boomthinguid3" path="res://Entities/BoomThing.tscn" id="8_rhqdq"]
 [ext_resource type="PackedScene" uid="uid://lvltrans" path="res://World/LevelTransition.tscn" id="99_trans"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_map"]
@@ -27,6 +29,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 107.72497, 191.97595, 0)
 [node name="Enemy1" parent="." unique_id=1153760308 instance=ExtResource("4_enemy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 93.565475, 5.057798, -35.590942)
 
+[node name="Hanger" parent="." unique_id=1788206376 instance=ExtResource("6_8w1nx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 84.431, 1.382, -0.525)
+
 [node name="Enemy2" parent="." unique_id=1644926454 instance=ExtResource("4_enemy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 2, -10)
 
@@ -38,3 +43,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.867264, 2, -5)
 [node name="LevelTransition" parent="." unique_id=2110926141 instance=ExtResource("99_trans")]
 transform = Transform3D(-0.038430568, 0, 0.99926126, 0, 1, 0, -0.99926126, 0, -0.038430568, -40.01616, -139.91432, -59.298454)
 next_level_path = "res://World/Room2.tscn"
+
+[node name="BoomThing" parent="." unique_id=798619451 instance=ExtResource("8_rhqdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.55132, 26.728302, -29.358318)

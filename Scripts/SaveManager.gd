@@ -1,7 +1,15 @@
 extends Node
 
 var current_slot: int = 1
-var current_level_path: String = "res://World/Tutorial.tscn"
+var current_level_path: String = ""
+
+# For jumpscare scene
+var jumpscare_enemy_scene_file: String = ""
+
+# Debug variable for fast testing:
+# -1 = Disabled (Default)
+# 0 = Tutorial, 1 = Room1, 2 = Room2, 3 = Finale
+var DEBUG_START_ROOM: int = 2
 
 const SAVE_DIR = "user://"
 
@@ -13,16 +21,29 @@ func save_game(slot: int):
 	var img = get_viewport().get_texture().get_image()
 	img.save_png(SAVE_DIR + "save_slot_" + str(slot) + ".png")
 	
-	# Save data
 	var data = {
 		"level": current_level_path
 	}
-	var file = FileAccess.open(SAVE_DIR + "save_slot_" + str(slot) + ".json", FileAccess.WRITE)
+	var path = SAVE_DIR + "save_slot_" + str(slot) + ".json"
+	var file = FileAccess.open(path, FileAccess.WRITE)
 	if file:
 		file.store_string(JSON.stringify(data))
 		file.close()
 
 func load_game(slot: int):
+	current_slot = slot
+	
+	if DEBUG_START_ROOM != -1:
+		var rooms = [
+			"res://World/Tutorial.tscn",
+			"res://World/Room1.tscn",
+			"res://World/Room2.tscn",
+			"res://World/Finale.tscn"
+		]
+		if DEBUG_START_ROOM >= 0 and DEBUG_START_ROOM < rooms.size():
+			current_level_path = rooms[DEBUG_START_ROOM]
+			get_tree().change_scene_to_file(current_level_path)
+			return
 	current_slot = slot
 	var path = SAVE_DIR + "save_slot_" + str(slot) + ".json"
 	if FileAccess.file_exists(path):
@@ -39,7 +60,7 @@ func load_game(slot: int):
 				return
 				
 	# Fallback if no save
-	current_level_path = "res://World/Tutorial.tscn"
+	current_level_path = "res://Menu/IntroCutscene.tscn"
 	get_tree().change_scene_to_file(current_level_path)
 
 func delete_save(slot: int):

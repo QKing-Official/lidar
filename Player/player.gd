@@ -13,6 +13,7 @@ signal scan_hit(pos: Vector3, is_danger: bool)
 @export var CENTER_WEIGHT: float = 1.4
 
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
+var footstep_timer: float = 0.0
 
 @onready var head: Node3D = $Head
 @onready var camera: Camera3D = $Head/Camera3D
@@ -76,6 +77,8 @@ func _unhandled_input(event):
 
 	if clicked:
 		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+			if has_node("/root/AudioManager"):
+				AudioManager.play_sfx("res://Assets/Audio/click.wav", -5.0, randf_range(1.5, 2.0))
 			_fire_circular_scan()
 		else:
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -101,11 +104,24 @@ func _physics_process(delta):
 	if direction:
 		velocity.x = direction.x * SPEED
 		velocity.z = direction.z * SPEED
+		
+		if is_on_floor():
+			footstep_timer += delta
+			if footstep_timer >= 0.4:
+				footstep_timer = 0.0
+				if has_node("/root/AudioManager"):
+					AudioManager.play_sfx("res://Assets/Audio/thump.wav", -15.0, randf_range(0.8, 1.2))
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
-
+		footstep_timer = 0.0
+	
 	move_and_slide()
+	
+	# If the player falls off the ledge in the Finale, instantly respawn them at the entry
+	if global_position.y < -10.0 and get_tree().current_scene and get_tree().current_scene.scene_file_path.ends_with("Finale.tscn"):
+		global_position = Vector3(17.317, 50.17, 0)
+		velocity = Vector3.ZERO
 
 func _fire_circular_scan():
 	var max_spread_rad = deg_to_rad(MAX_SPREAD_DEG)
@@ -177,8 +193,16 @@ func _fire_spherical_scan(rays: int):
 
 	scanner_ray.target_position = Vector3(0, 0, -SCAN_RANGE)
 
-func die():
-	if has_node("/root/SaveManager"):
-		SaveManager.reload_current_save()
-	else:
-		get_tree().reload_current_scene()
+var dead: bool = false
+
+func die(killer: Node3D = null):
+	if dead: return
+	dead = true
+	
+	set_physics_process(false)
+	
+	if killer and killer.scene_file_path:
+		if has_node("/root/SaveManager"):
+			SaveManager.jumpscare_enemy_scene_file = killer.scene_file_path
+			
+	get_tree().call_deferred("change_scene_to_file", "res://Menu/Jumpscare.tscn")

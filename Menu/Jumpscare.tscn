@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://n8f26mqf0ur7"]
+
+[ext_resource type="Script" uid="uid://b7mcojjjvyr4m" path="res://Menu/jumpscare.gd" id="1_x8q1b"]
+
+[node name="Jumpscare" type="Node3D" unique_id=248005629]
+script = ExtResource("1_x8q1b")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=539077569]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.82039)

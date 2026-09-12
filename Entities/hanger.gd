@@ -1,16 +1,15 @@
 extends CharacterBody3D
 
-# ==================== CONFIGURATION ====================
 @export_group("Dimensions & Scaling")
-@export_range(0.1, 2.0, 0.05) var ENEMY_SCALE: float = 0.5
+@export_range(0.1, 2.0, 0.05) var ENEMY_SCALE: float = 1.0
 
 @export_group("Movement & Speeds")
-@export var CHASE_SPEED: float = 1.8
-@export var ROTATION_SPEED: float = 5.0
+@export var CHASE_SPEED: float = 7.5
+@export var ROTATION_SPEED: float = 10.0
 @export var CATCH_DISTANCE: float = 1.8
 
 @export_group("Stealth & Visibility")
-@export var HIDE_MODEL: bool = false
+@export var HIDE_MODEL: bool = true
 @export var DEBUG_SHOW_MODEL: bool = false
 
 @export_group("LiDAR Reaction")
@@ -23,10 +22,8 @@ var active_dots_count: int = 0
 var base_quad_size: float = 0.06
 
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
-var ledge_ray: RayCast3D
 var nav_agent: NavigationAgent3D
 
-# World-Space LiDAR MultiMesh
 var dot_mesh: MultiMeshInstance3D
 var max_dots: int = 2500
 var dot_index: int = 0
@@ -36,11 +33,25 @@ var dot_world_positions: PackedVector3Array
 var dot_active: PackedByteArray
 
 func _ready():
-	# Use Godot's built in node scale to uniformly scale the enemy.
-	# Uniform scale is supported by Jolt Physics, unlike non-uniform or child-level scale overrides.
 	scale = Vector3.ONE * ENEMY_SCALE
 	
+	_disable_child_collisions(self)
+	
 	collision_layer = 1
+	
+	# Add a vertical hitbox that extends to the floor to catch the player if they walk under
+	var kill_area = Area3D.new()
+	kill_area.collision_layer = 0 # Cannot be hit by LiDAR
+	kill_area.collision_mask = 0xFFFFFFFF # Detect player on any layer
+	var col = CollisionShape3D.new()
+	var box = BoxShape3D.new()
+	box.size = Vector3(3.0, 20.0, 3.0) # Extend 20 units down
+	col.shape = box
+	# Offset X to -10 to position it exactly at the "head" of the hanger rather than the origin
+	col.position = Vector3(-10.0, -10.0, 0)
+	kill_area.add_child(col)
+	add_child(kill_area)
+	kill_area.body_entered.connect(_on_kill_area_entered)
 	collision_mask = 1 | 2
 
 	if DEBUG_SHOW_MODEL:
@@ -53,16 +64,24 @@ func _ready():
 	nav_agent.target_desired_distance = 0.5
 	add_child(nav_agent)
 	
-	# Prevent wandering to (0,0,0) before seeing player
 	nav_agent.target_position = global_position
 
-	_setup_ledge_detector()
 	_setup_isolated_world_cloud()
 
-	floor_snap_length = 0.4
-	floor_stop_on_slope = true
-
 	_locate_player()
+
+func _disable_child_collisions(node: Node):
+	if node != self and node is CollisionShape3D:
+		pass # We need our own CollisionShape3D to work! Wait, our CollisionShape3D is a direct child.
+		# If it's a child of the model, we want to disable it.
+		if node.get_parent() != self:
+			node.disabled = true
+	elif node != self and node is PhysicsBody3D:
+		node.collision_layer = 0
+		node.collision_mask = 0
+		
+	for child in node.get_children():
+		_disable_child_collisions(child)
 
 func _locate_player():
 	player = get_tree().get_first_node_in_group("player")
@@ -79,17 +98,9 @@ func _force_debug_material(node: Node):
 			child.visible = true
 			var mat = StandardMaterial3D.new()
 			mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-			mat.albedo_color = Color(1.0, 0.0, 1.0) # Bright Magenta
+			mat.albedo_color = Color(1.0, 0.0, 1.0) 
 			child.material_override = mat
 		_force_debug_material(child)
-
-func _setup_ledge_detector():
-	ledge_ray = RayCast3D.new()
-	ledge_ray.add_exception(self)
-	ledge_ray.position = Vector3(0, 0.3, 0)
-	ledge_ray.target_position = Vector3(0, -10.0, 0) # Extended to prevent false positive ledges when scaled
-	ledge_ray.collision_mask = 1
-	add_child(ledge_ray)
 
 func _setup_isolated_world_cloud():
 	dot_mesh = MultiMeshInstance3D.new()
@@ -124,7 +135,6 @@ func _setup_isolated_world_cloud():
 	dot_active.resize(max_dots)
 	dot_active.fill(0)
 
-	# PREVENT SINGULAR MATRIX CRASH (Scale must never be exactly 0.0)
 	var hidden_t = Transform3D(Basis().scaled(Vector3.ONE * 0.001), Vector3(0, -9999, 0))
 	for i in range(max_dots):
 		mm.set_instance_transform(i, hidden_t)
@@ -138,8 +148,7 @@ func add_enemy_dot(hit_pos: Vector3):
 			AudioManager.play_sfx("res://Assets/Audio/static.wav", 0.0, 2.5)
 		get_tree().create_timer(1.0).timeout.connect(func(): is_screeching = false)
 		
-	if not dot_mesh or not dot_mesh.multimesh:
-		return
+	if not dot_mesh or not dot_mesh.multimesh: return
 
 	var idx = dot_index
 	var life = maxf(1.0, BASE_DOT_LIFETIME + randf_range(-LIFETIME_JITTER, LIFETIME_JITTER))
@@ -162,17 +171,18 @@ func _physics_process(delta: float):
 
 	_update_individual_dots(delta)
 
-	if is_on_floor():
+	if is_on_ceiling():
 		velocity.y = 0.0
 	else:
-		velocity.y = maxf(velocity.y - (gravity * delta), -15.0)
+		# Reverse gravity, falls up
+		velocity.y = minf(velocity.y + (gravity * delta), 15.0)
 
 	if active_dots_count > 0:
 		velocity.x = 0.0
 		velocity.z = 0.0
 	else:
 		if _process_creep_movement(delta):
-			return # Early out if the scene is reloading
+			return 
 
 	move_and_slide()
 	_check_player_contact()
@@ -184,9 +194,11 @@ func _process_creep_movement(delta: float) -> bool:
 
 	var diff = player.global_position - global_position
 	diff.y = 0.0
-	var dist_to_player = diff.length()
+	var dist_to_player_2d = diff.length()
+	var dist_to_player_3d = global_position.distance_to(player.global_position)
 	
-	if dist_to_player <= CATCH_DISTANCE:
+	# Simulates a box extending to the floor: if player is directly underneath within catch distance
+	if dist_to_player_2d <= CATCH_DISTANCE and player.global_position.y <= global_position.y:
 		if player.has_method("die"):
 			player.die(self)
 		else:
@@ -196,9 +208,9 @@ func _process_creep_movement(delta: float) -> bool:
 				get_tree().reload_current_scene()
 		return true
 
-	# Always update the nav target to the player's position so it always paths to them.
-	# We temporarily disable the Line-of-Sight restriction to guarantee movement works!
-	nav_agent.target_position = player.global_position
+	var projected_target = player.global_position
+	projected_target.y = global_position.y
+	nav_agent.target_position = projected_target
 		
 	var next_path_pos = nav_agent.get_next_path_position()
 	var path_diff = next_path_pos - global_position
@@ -206,13 +218,10 @@ func _process_creep_movement(delta: float) -> bool:
 	
 	var is_path_valid = not nav_agent.is_navigation_finished()
 	
-	# If the path is "valid" but the next point is exactly our current position, the path is empty/broken.
-	if is_path_valid and path_diff.length_squared() <= 0.001 and dist_to_player > 1.0:
+	if is_path_valid and path_diff.length_squared() <= 0.001 and dist_to_player_2d > 1.0:
 		is_path_valid = false
 	
-	# FALLBACK: If you didn't bake the NavMesh correctly, this prevents the enemy from permanently freezing.
-	# It will just use basic straight-line chasing as long as it can see you.
-	if not is_path_valid and dist_to_player > 1.0:
+	if not is_path_valid and dist_to_player_2d > 1.0:
 		path_diff = player.global_position - global_position
 		path_diff.y = 0.0
 		is_path_valid = true
@@ -230,17 +239,14 @@ func _process_creep_movement(delta: float) -> bool:
 	return false
 
 func _update_individual_dots(delta: float):
-	if not dot_mesh or not dot_mesh.multimesh:
-		return
+	if not dot_mesh or not dot_mesh.multimesh: return
 
 	var mm = dot_mesh.multimesh
 	var count = 0
-	# Minimum scale 0.001 avoids zero-matrix crashes
 	var hidden_t = Transform3D(Basis().scaled(Vector3.ONE * 0.001), Vector3(0, -9999, 0))
 
 	for i in range(max_dots):
-		if dot_active[i] == 0:
-			continue
+		if dot_active[i] == 0: continue
 
 		dot_timers[i] -= delta
 
@@ -250,7 +256,6 @@ func _update_individual_dots(delta: float):
 			mm.set_instance_transform(i, hidden_t)
 		else:
 			count += 1
-			# Keep dots at full size until they expire so visual state matches freezing logic exactly
 			var t = Transform3D(Basis(), dot_world_positions[i])
 			mm.set_instance_transform(i, t)
 
@@ -270,18 +275,12 @@ func _check_player_contact():
 					get_tree().reload_current_scene()
 			return
 
-func _check_line_of_sight() -> bool:
-	if not player: return false
-	var space_state = get_world_3d().direct_space_state
-	var origin = global_position + Vector3(0, 1.0, 0)
-	var target = player.global_position + Vector3(0, 1.0, 0)
-	
-	# Check all layers (0xFFFFFFFF) in case the player was moved to a different collision layer
-	var query = PhysicsRayQueryParameters3D.create(origin, target, 4294967295, [self.get_rid()])
-	var result = space_state.intersect_ray(query)
-	
-	if result:
-		var collider = result.collider
-		if collider.is_in_group("player") or collider.name.to_lower().contains("player"):
-			return true
-	return false
+func _on_kill_area_entered(body: Node3D):
+	if body.is_in_group("player") or body.name.to_lower().contains("player"):
+		if body.has_method("die"):
+			body.die(self)
+		else:
+			if has_node("/root/SaveManager"):
+				SaveManager.reload_current_save()
+			else:
+				get_tree().reload_current_scene()

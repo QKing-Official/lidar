@@ -9,9 +9,12 @@ var music_player: AudioStreamPlayer
 var voice_player: AudioStreamPlayer
 
 func _ready() -> void:
+	# Keep playing music and SFX even when the game is paused
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	
 	# Dedicated player for background music
 	music_player = AudioStreamPlayer.new()
-	music_player.bus = BUS_MUSIC
+	music_player.bus = "Master"
 	add_child(music_player)
 
 	# Dedicated player for assistant voicelines
@@ -94,19 +97,51 @@ func play_sfx(path: String, volume_db: float = 0.0, pitch_scale: float = 1.0) ->
 	player.play()
 	player.finished.connect(player.queue_free)
 
-# Play background music by path
-func play_music(path: String, volume_db: float = 0.0) -> void:
+var current_music_path: String = ""
+var fade_tween: Tween = null
+var target_music_volume: float = 0.0
+
+# Play background music by path with crossfade
+func play_music(path: String, volume_db: float = 0.0, fade_time: float = 2.0) -> void:
+	print("AudioManager: Requesting music path: ", path)
+	if current_music_path == path and music_player.playing:
+		print("AudioManager: Already playing this track, skipping.")
+		return
+	
+	current_music_path = path
 	var stream = load(path)
 	if not stream:
+		print("AudioManager: Failed to load stream at ", path)
 		push_error("AudioManager: Could not find audio file at path: " + path)
 		return
+		
+	print("AudioManager: Stream loaded successfully: ", stream)
+		
+	# Note: Looping for WAV files must be set in Godot import settings.
+	# Forcing loop_mode at runtime on an imported WAV can cause playback failure!
 
-	if music_player.stream == stream and music_player.playing:
+	target_music_volume = volume_db
+
+	if not music_player.playing:
+		music_player.stream = stream
+		music_player.volume_db = target_music_volume
+		music_player.play()
 		return
+		
+	if fade_tween:
+		fade_tween.kill()
+		
+	fade_tween = get_tree().create_tween()
+	fade_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	# Fade out
+	fade_tween.tween_property(music_player, "volume_db", -60.0, fade_time / 2.0)
+	fade_tween.tween_callback(func():
+		music_player.stream = stream
+		music_player.play()
+	)
+	# Fade in
+	fade_tween.tween_property(music_player, "volume_db", target_music_volume, fade_time / 2.0)
 
-	music_player.stream = stream
-	music_player.volume_db = volume_db
-	music_player.play()
 
 # Play voicelines by path (interrupts previous line by default)
 func play_voiceline(path: String, interrupt: bool = true, volume_db: float = 0.0) -> void:
